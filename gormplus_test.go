@@ -9,12 +9,12 @@ import (
 )
 
 type Person struct {
-	Id   int
-	Name string
-	Age  int
+	Id   int64  `gorm:"column:id;primaryKey;autoIncrement;not null" json:"id"`
+	Name string `gorm:"column:name;default:null" json:"name"`
+	Age  int64  `gorm:"column:age;default:null" json:"age"`
 }
 
-func (p Person) TableName() string {
+func (Person) TableName() string {
 	return "person"
 }
 
