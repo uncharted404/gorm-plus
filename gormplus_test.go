@@ -21,6 +21,7 @@ func (Person) TableName() string {
 type IPersonRepo interface {
 	IRepository[Person]
 	GetOneByName(ctx context.Context, name string) (*Person, error)
+	GetListByName(ctx context.Context, name string) ([]*Person, error)
 }
 
 type personRepo struct {
@@ -36,9 +37,15 @@ func NewPersonRepo(db *gorm.DB) IPersonRepo {
 }
 
 func (r *personRepo) GetOneByName(ctx context.Context, name string) (*Person, error) {
-	qw := wrapper.Query().CheckZero(name).Eq("name", name)
+	qw := wrapper.Query().Eq("name", name)
 	person, err := r.GetOne(ctx, qw)
 	return person, err
+}
+
+func (r *personRepo) GetListByName(ctx context.Context, name string) ([]*Person, error) {
+	qw := wrapper.Query().CheckZero(name).Like("name", name)
+	persons, err := r.GetList(ctx, qw)
+	return persons, err
 }
 
 func TestRepo(t *testing.T) {
