@@ -99,21 +99,21 @@ func (qw *QueryWrapper) Le(field string, arg interface{}) *QueryWrapper {
 	return qw
 }
 
-func (qw *QueryWrapper) Between(field string, arg ...interface{}) *QueryWrapper {
+func (qw *QueryWrapper) Between(field string, left, right interface{}) *QueryWrapper {
 	if qw.isCheck {
 		qw.isCheck = false
 		return qw
 	}
-	qw.addCondition(between, field, arg...)
+	qw.addCondition(between, field, left, right)
 	return qw
 }
 
-func (qw *QueryWrapper) NBetween(field string, arg ...interface{}) *QueryWrapper {
+func (qw *QueryWrapper) NBetween(field string, left, right interface{}) *QueryWrapper {
 	if qw.isCheck {
 		qw.isCheck = false
 		return qw
 	}
-	qw.addCondition(nBetween, field, arg...)
+	qw.addCondition(nBetween, field, left, right)
 	return qw
 }
 
