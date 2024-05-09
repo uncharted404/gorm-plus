@@ -20,12 +20,24 @@ func Update(capacity ...int) *UpdateWrapper {
 	}
 }
 
-func (uw *UpdateWrapper) SetMap(sets map[string]interface{}) {
-	uw.sets = sets
+func (uw *UpdateWrapper) SetMap(sets map[string]interface{}) *UpdateWrapper {
+	if uw.isCheck {
+		uw.isCheck = false
+		return uw
+	}
+	for k, v := range sets {
+		uw.sets[k] = v
+	}
+	return uw
 }
 
-func (uw *UpdateWrapper) Set(field string, arg interface{}) {
+func (uw *UpdateWrapper) Set(field string, arg interface{}) *UpdateWrapper {
+	if uw.isCheck {
+		uw.isCheck = false
+		return uw
+	}
 	uw.sets[field] = arg
+	return uw
 }
 
 func (uw *UpdateWrapper) FillSet(db *gorm.DB) *gorm.DB {
