@@ -36,7 +36,7 @@ func NewPersonRepo(db *gorm.DB) IPersonRepo {
 }
 
 func (r *personRepo) GetOneByName(ctx context.Context, name string) (*Person, error) {
-	qw := wrapper.Query().Eq("name", name)
+	qw := wrapper.Query().CheckZero(name).Eq("name", name)
 	person, err := r.GetOne(ctx, qw)
 	return person, err
 }
