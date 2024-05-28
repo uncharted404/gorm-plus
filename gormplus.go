@@ -45,7 +45,9 @@ func NewRepository[T any](db *gorm.DB) Repository[T] {
 func (r *Repository[T]) GetOne(ctx context.Context, qw *wrapper.QueryWrapper) (*T, error) {
 	var entity T
 	db := r.db.WithContext(ctx)
-	qw.FillCondition(db)
+	if qw != nil {
+		qw.FillCondition(db)
+	}
 	err := db.First(&entity).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -67,7 +69,9 @@ func (r *Repository[T]) GetOneById(ctx context.Context, id interface{}) (*T, err
 func (r *Repository[T]) GetList(ctx context.Context, qw *wrapper.QueryWrapper) ([]*T, error) {
 	var entityList []*T
 	db := r.db.WithContext(ctx)
-	qw.FillCondition(db)
+	if qw != nil {
+		qw.FillCondition(db)
+	}
 	err := db.Find(&entityList).Error
 	return entityList, err
 }
@@ -76,7 +80,9 @@ func (r *Repository[T]) Page(ctx context.Context, page *wrapper.Page, qw *wrappe
 	var entityList []*T
 	var total int64
 	db := r.db.WithContext(ctx)
-	qw.FillCondition(db)
+	if qw != nil {
+		qw.FillCondition(db)
+	}
 	err := db.Count(&total).Error
 	if err != nil {
 		return nil, 0, err
@@ -90,7 +96,9 @@ func (r *Repository[T]) Page(ctx context.Context, page *wrapper.Page, qw *wrappe
 func (r *Repository[T]) Count(ctx context.Context, qw *wrapper.QueryWrapper) (int64, error) {
 	var total int64
 	db := r.db.WithContext(ctx)
-	qw.FillCondition(db)
+	if qw != nil {
+		qw.FillCondition(db)
+	}
 	err := db.Count(&total).Error
 	return total, err
 }
@@ -108,7 +116,9 @@ func (r *Repository[T]) SaveBatch(ctx context.Context, entityList []*T) error {
 func (r *Repository[T]) Delete(ctx context.Context, qw *wrapper.QueryWrapper) error {
 	var entity T
 	db := r.db.WithContext(ctx)
-	qw.FillCondition(db)
+	if qw != nil {
+		qw.FillCondition(db)
+	}
 	err := db.Delete(&entity).Error
 	return err
 }
@@ -128,7 +138,9 @@ func (r *Repository[T]) DeleteByIds(ctx context.Context, ids []interface{}) erro
 func (r *Repository[T]) Update(ctx context.Context, uw *wrapper.UpdateWrapper) error {
 	var entity T
 	db := r.db.WithContext(ctx).Model(&entity)
-	uw.FillCondition(db)
+	if uw != nil {
+		uw.FillCondition(db)
+	}
 	err := uw.FillSet(db).Error
 	return err
 }
